@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  nginx-rtmp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tiangolo/nginx-rtmp
+    container_name: nginx-rtmp
+    ports:
+      - "1935:1935" # RTMP port
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
