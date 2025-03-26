@@ -14,7 +14,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('http://localhost:3000/auth/user', { credentials: 'include' });
       if (response.ok) {
-        console.log('test');
         const data = await response.json();
         setUser(data);
         setIsLoading(false);

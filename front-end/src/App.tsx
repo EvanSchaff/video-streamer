@@ -1,9 +1,13 @@
 import ChatRoom from './components/Chatroom/ChatSidebar';
 import VideoSection from './components/VideoSection/VideoSection';
+import { AuthContext } from './contexts/AuthContext';
 import { AuthProvider } from './contexts/AuthProvider';
 import { ChatCollapseProvider } from './contexts/ChatCollapseProvider';
+import { useContext } from 'react';
 
 function App() {
+  const { user, isLoading } = useContext(AuthContext);
+
   return (
     <AuthProvider>
       <ChatCollapseProvider>
@@ -15,6 +19,11 @@ function App() {
             <ChatRoom />
           </div>
         </div>
+        {!isLoading && user?.site_username === null && (
+          <div className="absolute inset-0 flex items-center justify-center text-amber-50">
+            hello
+          </div>
+        )}
       </ChatCollapseProvider>
     </AuthProvider>
   );

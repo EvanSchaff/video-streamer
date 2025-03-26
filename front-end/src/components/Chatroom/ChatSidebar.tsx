@@ -1,6 +1,5 @@
 import { ChatCollapseContext } from '../../contexts/ChatCollapseContext';
 import useChat from '../../hooks/useChat';
-import useDiscord from '../../hooks/useDiscord';
 import ChatRoomHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ChatMessages from './ChatMessages';
@@ -9,7 +8,6 @@ import { useContext } from 'react';
 const ChatRoom = () => {
   const { isCollapsed } = useContext(ChatCollapseContext);
   const { messages, messageInputValue, sendMessage, setNewMessage } = useChat();
-  const { redirectToDiscordAuth } = useDiscord();
 
   return (
     <div
@@ -23,7 +21,6 @@ const ChatRoom = () => {
         sendMessage={sendMessage}
         messageInputValue={messageInputValue}
         setNewMessage={setNewMessage}
-        redirectToDiscordAuth={redirectToDiscordAuth}
       />
     </div>
   );

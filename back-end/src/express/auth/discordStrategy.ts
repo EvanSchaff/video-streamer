@@ -2,6 +2,7 @@ import { Strategy as DiscordStrategy } from 'passport-discord';
 import { VerifyCallback } from 'passport-oauth2';
 import { Profile } from 'passport-discord';
 import dotenv from 'dotenv';
+import { CreateUser, FindUser } from '../../db/models/userModel';
 
 dotenv.config();
 
@@ -28,7 +29,11 @@ const discordStrategy = new DiscordStrategy(
         done: VerifyCallback
     ) => {
         try {
-            // Add database stuff later
+            const user = await FindUser(profile.id);
+            if (!user) {
+                await CreateUser(profile.id);
+            }
+
             return done(null, profile);
         } catch (error) {
             return done(error as Error);

@@ -25,4 +25,5 @@ export interface DiscordUser {
     provider: string;
     accessToken: string;
     fetchedAt: string;
+    site_username: string | null;
 }

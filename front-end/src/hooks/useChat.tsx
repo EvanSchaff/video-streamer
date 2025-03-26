@@ -37,3 +37,12 @@ const useChat = () => {
 };
 
 export default useChat;
+
+// User logs in
+//
+
+// SEND MESSAGE
+// On send update array with the message
+// then send to websocket server
+// authenticate it
+// broadcast to all clients or return error

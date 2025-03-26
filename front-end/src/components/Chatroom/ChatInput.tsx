@@ -1,5 +1,6 @@
 import discordLogo from '../../assets/discord_icon_white.png';
 import { AuthContext } from '../../contexts/AuthContext';
+import useDiscord from '../../hooks/useDiscord';
 import { Shield, LogOut } from 'lucide-react';
 import React, { useContext, useEffect, useRef } from 'react';
 
@@ -7,16 +8,11 @@ interface ChatInputProps {
   sendMessage: () => void;
   messageInputValue: string;
   setNewMessage: (message: string) => void;
-  redirectToDiscordAuth: () => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({
-  sendMessage,
-  messageInputValue,
-  setNewMessage,
-  redirectToDiscordAuth,
-}) => {
+const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, messageInputValue, setNewMessage }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const { redirectToDiscordAuth, redirectToLogout } = useDiscord();
   const { user, getAvatarURL, isLoading } = useContext(AuthContext);
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
@@ -69,7 +65,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
                       <Shield className="h-5 w-5"></Shield>
                       <span>Admin</span>
                     </button>
-                    <button className="flex p-1 items-center gap-2 text-sm font-medium hover:rounded-sm text-zinc-400 hover:bg-gray-500">
+                    <button
+                      className="flex p-1 items-center gap-2 text-sm font-medium hover:rounded-sm text-zinc-400 hover:bg-gray-500"
+                      onClick={redirectToLogout}
+                    >
                       <LogOut className="h-5 w-5"></LogOut>
                       <span>Sign Out</span>
                     </button>
