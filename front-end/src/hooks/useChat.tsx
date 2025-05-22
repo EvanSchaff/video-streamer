@@ -1,10 +1,12 @@
 import sadgeImg from '../assets/sadge.png';
 import { Message } from '../types/message';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 const useChat = () => {
   const [messageInputValue, setNewMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const paraseEmotes = (message: string) => {
     return message.replace(/:(\w+):/g, (match, emote) => emoteMap[emote] || match);
@@ -25,8 +27,38 @@ const useChat = () => {
       console.log(updatedMessage);
       setMessages([...messages, updatedMessage]);
       setNewMessage('');
+
+      const websocketMessage = {
+        color: 'red',
+        message: messageInputValue,
+      };
+
+      socket?.emit('message', websocketMessage);
     }
   };
+
+  useEffect(() => {
+    const serverUrl = 'http://localhost:3000';
+    const newSocket = io(serverUrl, {
+      transports: ['websocket'],
+      reconnection: true,
+    });
+
+    newSocket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    newSocket.on('message', (msg: Message) => {
+      console.log('Message received from server:', msg);
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
 
   return {
     messages,

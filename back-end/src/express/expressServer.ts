@@ -17,13 +17,16 @@ app.use(cors({
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// Setup session
-app.use(session({
+export const sessionSettings = session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false },
-}));
+})
+
+
+// Setup session
+app.use(sessionSettings);
 
 // Setup passport
 app.use(passport.initialize());

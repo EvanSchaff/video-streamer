@@ -1,4 +1,4 @@
-import { app } from './express/expressServer';
+import { app, sessionSettings } from './express/expressServer';
 import http from 'http';
 import { setupWebSocket } from './websocket/webSocketServer';
 import { initializeDB } from './db/initializeDB';
@@ -7,12 +7,11 @@ import { initializeDB } from './db/initializeDB';
 
 
 const server = http.createServer(app);
-setupWebSocket(server);
+setupWebSocket(server, sessionSettings);
 
 const PORT = process.env.PORT || 3000;
 
 (async () => {
-    console.log('test');
     await initializeDB();
 })();
 
