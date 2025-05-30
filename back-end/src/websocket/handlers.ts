@@ -9,14 +9,12 @@ export function setupWebSocketHandlers(io: Server) {
             console.log('User logged in as guest');
         } else {
             console.log('User logged in as ', user.username);
-            console.log(user);
         }
         socket.on(WebSocketEvents.MESSAGE, (msg) => {
             if (!user) {
                 return;
             }
             msg.username = user.username;
-            console.log(msg);
             socket.broadcast.emit(WebSocketEvents.MESSAGE, msg);
         });
         socket.on(WebSocketEvents.DISCONNECT, () => {

@@ -1,12 +1,14 @@
 import sadgeImg from '../assets/sadge.png';
+import { AuthContext } from '../contexts/AuthContext';
 import { Message } from '../types/message';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 const useChat = () => {
   const [messageInputValue, setNewMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const { user } = useContext(AuthContext);
 
   const paraseEmotes = (message: string) => {
     return message.replace(/:(\w+):/g, (match, emote) => emoteMap[emote] || match);
@@ -19,12 +21,11 @@ const useChat = () => {
   const sendMessage = () => {
     if (messageInputValue) {
       const message = {
-        username: 'Frogs',
+        username: user?.username,
         color: 'red',
         message: messageInputValue,
       };
       const updatedMessage = { ...message, message: paraseEmotes(message.message) };
-      console.log(updatedMessage);
       setMessages([...messages, updatedMessage]);
       setNewMessage('');
 
@@ -50,7 +51,8 @@ const useChat = () => {
 
     newSocket.on('message', (msg: Message) => {
       console.log('Message received from server:', msg);
-      setMessages((prev) => [...prev, msg]);
+      const updatedMessage = { ...msg, message: paraseEmotes(msg.message) };
+      setMessages((prevMessages) => [...prevMessages, updatedMessage]);
     });
 
     setSocket(newSocket);

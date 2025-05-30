@@ -1,5 +1,5 @@
 export interface Message {
-    username: string;
+    username: string | undefined;
     color: string;
     message: string;
 }

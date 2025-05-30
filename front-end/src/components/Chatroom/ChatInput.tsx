@@ -25,7 +25,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, messageInputValue, s
         !menuRef.current.contains(event.target as Node) &&
         !avatarRef.current.contains(event.target as Node)
       ) {
-        setIsMenuOpen(false); // Close the menu
+        setIsMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
