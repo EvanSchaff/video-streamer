@@ -16,6 +16,22 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, messageInputValue, s
   const { user, getAvatarURL, isLoading } = useContext(AuthContext);
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
+  const chatInputRef = useRef<HTMLDivElement>(null);
+
+  const handleInput = (e: React.ChangeEvent<HTMLDivElement>) => {
+    setNewMessage(e.target.textContent || '');
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+      setNewMessage('');
+      if (chatInputRef.current) {
+        chatInputRef.current.innerText = '';
+      }
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -36,13 +52,16 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, messageInputValue, s
 
   return (
     <div className="flex flex-shrink-0 flex-col gap-2 border-l border-[#35353B] bg-neutral-950 p-3">
-      <input
-        className="flex-grow rounded-md border bg-neutral-900 p-2 text-gray-500 outline-gray-500"
-        type="text"
-        value={messageInputValue}
-        onChange={(e) => setNewMessage(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-        placeholder="Send a message"
+      <div
+        contentEditable
+        ref={chatInputRef}
+        className="leading-8 flex-grow rounded-md border bg-neutral-900 p-2 text-gray-500 outline-gray-500 overflow-y-auto"
+        onInput={handleInput}
+        onKeyDown={handleKeyDown}
+        style={{
+          minHeight: '2.5rem',
+          maxHeight: '8rem', // cap at ~5 lines (adjust based on font size/line height)
+        }}
       />
       <div className="flex justify-between">
         {!isLoading &&
